@@ -37,7 +37,8 @@ body {
   border : 10px solid white;
   border-radius : 5px;
   width: 70%;
-  height: 92% ;
+  height: 92%;
+  overflow: auto;
 }
 .list {
   padding: 20px;
