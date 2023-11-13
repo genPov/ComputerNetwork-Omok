@@ -24,12 +24,14 @@ module.exports = (server) => {
         }, 1000);
 
         // 방 리스트
+        // data: null
         socket.on("roomList", (data) => {
             socket.emit("roomList", roomList);
         });
 
 
         // 방 생성
+        // data: {name: string, isPrivate: boolean, password: string}
         socket.on("createRoom", (data) => {
             var name = data.name.trim();
             console.log(`${getAddress(socket)} created room ${name}.`);
@@ -77,6 +79,7 @@ module.exports = (server) => {
         });
 
         // 방 퇴장
+        // data: null
         socket.on("exitRoom", (data) => {
             var roomId = Array.from(socket.rooms)[1];
             var room = roomList[roomId];
