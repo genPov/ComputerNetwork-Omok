@@ -1,0 +1,89 @@
+.room {
+    display: flex;
+    flex-direction: row;
+
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #1d243d;
+}
+
+
+/* 게임판 */
+
+.room > .game {
+    display: flex;
+    justify-content: center;
+    flex: 6 1 0;
+}
+
+.room > .game > .omok-board {
+    background-image: url("../img/omok-board.png");
+	background-size: contain;
+	object-fit: contain;
+	display: grid;
+	grid-template-columns: repeat(15, 1fr);
+    aspect-ratio: 1/1;
+    height: 90%;
+}
+.room > .game > .omok-board > div {
+    aspect-ratio: 1;
+}
+.room > .game > .omok-board > .empty:hover {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+/* 대시보드 */
+
+.room > .dashboard {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 200px;
+}
+
+.room > .dashboard > .chat {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+
+    background-color: #2d3658;
+}
+
+.room > .dashboard > .chat > .message-wrapper {
+    flex: 1 1 0;
+
+    overflow-y: auto;
+}
+
+.room > .dashboard > .chat > .message-wrapper > div {
+    padding: 5px 10px;
+    font-size: 15px;
+    color: #FFF;
+    word-break: break-all;
+}
+
+.room > .dashboard > .chat > .input-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+    
+    padding: 15px;
+    background-color: #4e5a87;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+.room > .dashboard > .chat > .input-wrapper > input {
+    flex: 1 1 0;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #FFF;
+}
+.room > .dashboard > .chat > .input-wrapper > input::placeholder {
+    color: #CCC;
+}

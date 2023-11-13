@@ -2,6 +2,7 @@
     <head>
         <title>오목 - OMOK</title>
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/room.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@
         <div class="content">
             <div class="box"><a class="autoMatching" href="/playOmok"> 자동 매칭 </a></div>
             <br>
-            <div class="box" onclick="openPopup()"><a class="autoMatching" >방생성 하기 </a></div> </br>
+            <div class="box" id="openPopup"><a class="autoMatching" >방생성 하기 </a></div> </br>
             <div>
                 <%= uid %> 님
                 <%= ranking %> 위
@@ -46,7 +47,7 @@
         </div>
         
         <div>
-            <button type="button" class="logout" onclick="logout()"> 로그아웃 </button>
+            <button type="button" class="logout" id="logout"> 로그아웃 </button>
         </div>
 
         <!-- 팝업창 -->
@@ -67,12 +68,33 @@
                     <input type="checkbox" id="secret" style="width: 12px; height: 12px; border-radius: 1px; border: 1px solid #5865f2;">
                 </div>
                 <div class="popup-buttons">
-                    <div class="popup-button popup-button-cancel" onclick="closePopup()">취소</div>
-                    <input type="button" class="popup-button popup-button-create" value="생성하기" onclick="submit()">
+                    <div class="popup-button popup-button-cancel" id="closePopup">취소</div>
+                    <input type="button" class="popup-button popup-button-create" value="생성하기" id="createRoom">
                 </div>
             </div>
         </div>
 
-        <script src='js/main.js'></script>
+        
+        <!-- 게임방 -->
+        <div class="room" style="display: none;">
+
+            <div class="game">
+                <div class="omok-board"></div>
+            </div>
+
+            <div class="dashboard">
+                <div class="room-name"></div>
+                <div class="chat">
+                    <div class="message-wrapper"></div>
+                    <div class="input-wrapper">
+                        <input placeholder="Send a message" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+]
+        <script src='js/main.js' type="module"></script>
     </body>
 </html>

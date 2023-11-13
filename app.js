@@ -99,13 +99,8 @@ app.post('/resetPw' ,function (req,res) {
 });
 
 //오목
-app.get('/omok',auth, function(req, res){
+app.get('/playOmok',auth, function(req, res){
     res.sendFile(__dirname + '/public/omok.html');
-});
-
-//바둑
-app.get('/baduk',auth, function(req, res){
-    res.sendFile(__dirname + '/public/baduk.html');
 });
 
 // index
@@ -130,5 +125,5 @@ var server = app.listen(80, function() {
     console.log('Connect 80 port');
     updateRank(connection);
 });
-const socket = require(__dirname + '/socket');
+const socket = require(__dirname + '/socket/socket');
 socket(server);

@@ -54,7 +54,7 @@ function updateRank(connection) {
             connection.query(updateQuery,[i+1,rows[i].uid],(error,result) => {
                 if (error) throw error;
                 else {
-                    //console.log(result);
+                    console.log(result);
                 }
             })
         }
