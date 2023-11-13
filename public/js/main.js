@@ -15,7 +15,9 @@ function addRoom(room) {
     item.classList.add("list");
     item.classList.add(`${room.id}`);
     item.innerHTML = room.name;
-    item.onclick = () => {}; // 클릭이벤트
+    item.onclick = () => {
+        socket.emit("joinRoom", {roomId: room.id, password: ""});
+    };
     roomList.appendChild(item);
 }
 
