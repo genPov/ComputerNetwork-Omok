@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var content = document.getElementById("content");
     setTimeout(function() {
         logoContainer.classList.add("hidden");
-        content.style.display = "block";
+        //content.style.display = "block";
     }, 1200);
 });
 
