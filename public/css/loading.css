@@ -1,0 +1,76 @@
+.loading-layer {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(68, 68, 68, 0.3);
+    z-index: 11111;
+}
+.loading-layer .loading-wrap {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+.loading-layer .loading-wrap .loading-text {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 3px 2.6px #a2a2a2;
+    font-size: 3.8em;
+    position: relative;
+    top: -20px;
+}
+.loading-layer.active-loading .loading-wrap .loading-text span:nth-child(1) {
+    animation: loading-01 0.82s infinite;
+}
+.loading-layer.active-loading .loading-wrap .loading-text span:nth-child(2) {
+    animation: loading-01 0.82s 0.205s infinite;
+}
+.loading-layer.active-loading .loading-wrap .loading-text span:nth-child(3) {
+    animation: loading-01 0.82s 0.41s infinite;
+}
+.loading-layer.active-loading .loading-wrap .loading-text span:nth-child(4) {
+    animation: loading-01 0.82s 0.605s infinite;
+}
+
+@keyframes loading-01 {
+    0% {
+        color: #000;
+    }
+    50% {
+        color: #fff;
+    }
+    100% {
+        color: #000;
+    }
+}
+@keyframes loading-02 {
+    25% {
+        color: #000;
+    }
+    75% {
+        color: #fff;
+    }
+}
+@keyframes loading-03 {
+    0% {
+        color: #fff;
+    }
+    50% {
+        color: #000;
+    }
+    100% {
+        color: #fff;
+    }
+}
+@keyframes loading-04 {
+    25% {
+        color: #fff;
+    }
+    75% {
+        color: #000;
+    }
+}

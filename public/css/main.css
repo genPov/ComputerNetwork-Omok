@@ -1,0 +1,197 @@
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+/* zocial */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; 
+}
+
+body {
+  background: #272125;
+  font-family: 'Roboto', sans-serif;
+}
+
+.autoMatching {
+    position:relative;
+    text-decoration: none;
+    color: white;
+    margin-top: auto;
+    font-size: 24px;
+}
+
+.roomList {
+  float:left; 
+  margin-top: 1.2%;
+  margin-left: 3%;
+  padding : 30px;
+  text-align: center;
+  color: whitesmoke;
+  border : 10px solid white;
+  border-radius : 5px;
+  width: 70%;
+  height: 92% ;
+}
+.list {
+  padding: 20px;
+  border-bottom: 1px solid white;
+}
+.content {
+  margin-top: 1.2%;
+  margin-left : 4%; 
+  padding : 30px;
+  width: 20%;
+  height: 50%;
+  color:white;
+  border : 10px solid white;
+  border-radius : 5px;
+  float:left; 
+}
+.myinfo {
+  float:left;
+  margin-top: 1%;
+  margin-left : 4%; 
+  padding: 20px;
+  color:white;
+  text-align: center;
+  font-size: 25px;
+  width: 20%;
+  height: 30%;
+  color:white;
+  border : 10px solid white;
+  border-radius : 5px;
+}
+.ranking {
+  text-align: center;
+  font-size: 20px;
+}
+.logout {
+  float:left;
+  margin-top: 2%;
+  margin-left : 6%; 
+  width: 240px;
+  height: 5%;
+  background-color: rgb(255, 66, 33);
+  color:white;
+  text-align: center;
+  font-size: 20px;
+}
+.box {
+  background-color: rgb(125, 125, 231);
+  color:white;
+  height: auto;
+  text-align: center;
+}
+
+
+/* popup */
+.popup {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  width: 400px;
+  height: 370px;
+  position: fixed;
+  background: #313338;
+  z-index: 1;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 54px;
+  top: 10px;
+}
+
+.popup-content p {
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+}
+
+.popup-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-bottom: 8px;
+}
+
+.popup-input p {
+  font-size: 12px;
+  text-align: center;
+  color: #b4b8bf;
+}
+
+.popup-input .error {
+  color: #e95454;
+}
+
+.popup-input input {
+  width: 292px;
+  height: 25px;
+  border-radius: 2px;
+  background: #1e1f22;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.popup-button {
+  width: 138px;
+  height: 25px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.popup-button-cancel {
+  background: #e95454;
+}
+
+.popup-button-create {
+  border:none;
+  background: #5865f2;
+}
+
+/* 로딩 */
+#logo-container {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 1s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white; /* 배경색을 페이지 배경색과 일치시켜 로고 페이드아웃 효과를 감출 수 있음 */
+}
+#logo-container.hidden {
+  opacity: 0;
+  pointer-events: none; /* 로고가 클릭 가능하지 않도록 설정 */
+}
+
+#content {
+  display: none;
+}

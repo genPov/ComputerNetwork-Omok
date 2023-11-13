@@ -1,0 +1,15 @@
+.board {
+	background: url("../img/board.jpg");
+	background-size: contain;
+	object-fit: contain;
+	display: grid;
+	width: 700px;
+	padding: 0.5%;
+	grid-template-columns: repeat(15, 1fr);
+}
+.board div {
+	aspect-ratio: 1;
+}
+.empty:hover {
+	background-color: rgba(255, 255, 255, 0.3);
+}

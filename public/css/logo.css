@@ -1,0 +1,21 @@
+#logo-container {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 1s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white; /* 배경색을 페이지 배경색과 일치시켜 로고 페이드아웃 효과를 감출 수 있음 */
+}
+
+#logo-container.hidden {
+  opacity: 0;
+  pointer-events: none; /* 로고가 클릭 가능하지 않도록 설정 */
+}
+
+#content {
+  display: none;
+}

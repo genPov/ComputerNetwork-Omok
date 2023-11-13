@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>오목 - OMOK</title>
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        <!-- 로딩화면 -->
+        <div id="logo-container" style="text-align: center;">
+            <img src="./img/logo.png" alt="로고" style="margin-top: 17%;">
+            <P style="font-family: Black Ops One; font-size: 30px;">
+            ONLINE - OMOK - NETWORK
+        </div>
+
+        <!-- 방 목록 -->
+        <div class="roomList">
+            <div class="list"> 대기 방 </div>
+        </div>
+        
+
+        <!-- 랭킹 등 -->
+        <div class="content">
+            <div class="box"><a class="autoMatching" href="/playOmok"> 자동 매칭 </a></div>
+            <br>
+            <div class="box" onclick="openPopup()"><a class="autoMatching" >방생성 하기 </a></div> </br>
+            <div>
+                <%= uid %> 님
+                <%= ranking %> 위
+            </div>
+            <hr>
+            <div class='ranking' id="rank">
+                <img src="./img/crown.png" width="20%" height="12%"> <br></br>
+                <div> 1위 <%= r1 %>님 </div>
+                <div> 2위 <%= r2 %>님 </div>
+                <div> 3위 <%= r3 %>님 </div>
+            </div>
+        </div>
+
+        <!-- 내정보 -->
+        <div class="myinfo">
+            <p> 내 정보  </p>
+            <div> <%= win %>승 <%= lose %>패 - <%= ranking %> 위</div>
+        </div>
+        
+        <div>
+            <button type="button" class="logout" onclick="logout()"> 로그아웃 </button>
+        </div>
+
+        <!-- 팝업창 -->
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <p>방 생성</p>
+                <div class="popup-input">
+                    <p>제목</p>
+                    <p class="error">*</p>
+                </div>
+                <input type="text" id="roomName" placeholder="방 제목" style="font-size: 20px;">
+                <div class="popup-input">
+                    <p>암호</p>
+                </div>
+                <input type="password" id="rpw" placeholder="비밀번호 (선택)" style="font-size: 20px;">
+                <div class="popup-input">
+                    <p>비밀 방</p>
+                    <input type="checkbox" id="secret" style="width: 12px; height: 12px; border-radius: 1px; border: 1px solid #5865f2;">
+                </div>
+                <div class="popup-buttons">
+                    <div class="popup-button popup-button-cancel" onclick="closePopup()">취소</div>
+                    <input type="button" class="popup-button popup-button-create" value="생성하기" onclick="submit()">
+                </div>
+            </div>
+        </div>
+
+        <script src='js/main.js'></script>
+    </body>
+</html>
