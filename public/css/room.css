@@ -32,9 +32,20 @@
 }
 .room > .game > .omok-board > div {
     aspect-ratio: 1;
+    margin: 1%;
 }
 .room > .game > .omok-board > .empty:hover {
 	background-color: rgba(255, 255, 255, 0.3);
+}
+.room > .game > .omok-board > .stone-black  {
+	background: url("../img/stone-black.png");
+	background-size: contain;
+	object-fit: contain;
+}
+.room > .game > .omok-board > .stone-white {
+	background: url("../img/stone-white.png");
+	background-size: contain;
+	object-fit: contain;
 }
 
 
@@ -44,6 +55,20 @@
     display: flex;
     flex-direction: column;
     flex: 1 0 200px;
+}
+
+.room > .dashboard > .top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 0 0 auto;
+
+    padding: 15px;
+    background-color: #4e5a87;
+}
+
+.room > .dashboard > .top-bar > .actions > span {
+    cursor: pointer;
 }
 
 .room > .dashboard > .chat {
