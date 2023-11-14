@@ -1,6 +1,6 @@
 var socket = io();
 
-import { omok } from './omok.js';
+import { omok } from "./omok.js";
 
 omok(socket);
 
@@ -36,6 +36,8 @@ socket.on("roomAdded", (room) => {
 });
 // 삭제된 방 div에 적용
 socket.on("roomDeleted", (room) => {
+    console.log("roomDeleted");
+    console.log(room);
     document.getElementsByClassName(`${room.id}`)[0].remove();
 });
 
@@ -78,11 +80,19 @@ setOnclickListner("createRoom", () => {
     var room = {name,rpw,isPrivate};
     
     console.log(room);
-    socket.emit('createRoom',room)
+    socket.emit("createRoom", room);
     
     document.getElementById("popup").style.display = "none";
 });
 
 setOnclickListner("logout", () => {
     location.href="/logout"
+});
+
+
+
+// room 내부
+
+setOnclickListner("exitRoom", () => {
+    socket.emit("exitRoom", true);
 });

@@ -19,9 +19,9 @@ module.exports = (server) => {
     io.on("connection", (socket) => {
         console.log('New connection from ' + getAddress(socket));
 
-        setInterval(()=>{
-            console.log(socket.rooms);
-        }, 1000);
+        // setInterval(()=>{
+        //     console.log(socket.rooms);
+        // }, 1000);
 
         // 방 리스트
         // data: null
@@ -95,12 +95,15 @@ module.exports = (server) => {
             }
             
             room.userCount -= 1;
-            socket.leave(`${roomId}`)
+            socket.leave(`${roomId}`);
+            socket.emit("exitRoom");
 
             // 남은 인원이 없는 경우 방 삭제
             if (room.userCount == 0) {
                 delete roomList[roomId];
                 delete passwords[roomId];
+                io.emit("roomDeleted", room);
+                console.log(`room ${room.id} deleted`);
             }
         });
     });
