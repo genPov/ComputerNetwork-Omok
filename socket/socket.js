@@ -20,7 +20,7 @@ module.exports = (server) => {
     io.on("connection", (socket) => {
         console.log('New connection from ' + getAddress(socket));
         socket.data = jwtdata(socket.handshake.headers.cookie.split('=')[1]);
-        //console.log(socket.data);
+        //console.log(typeof(socket.data));
         /* 방 리스트 */
         // data: null
         socket.on("roomList", (data) => {
@@ -132,7 +132,7 @@ module.exports = (server) => {
                 return;
             }
 
-            io.to(`${roomId}`).emit("roomMessage", {id: socket.id, msg: msg});
+            io.to(`${roomId}`).emit("roomMessage", {id: socket.data.uid, msg: msg});
         });
 
 
