@@ -43,7 +43,7 @@ app.post('/login',function(req,res){
             if (error) throw error;
             else if (rows.length> 0) {
                 token = jwt.sign({uid: id,rank: myinfo.ranking,'win':myinfo.win,'lose':myinfo.lose}, SECRET_KEY, {expiresIn: '20m'});
-                res.cookie('token', token);
+                res.cookie('token', token,{httpOnly:true});
                 return res.status(200).redirect('/');
             }else {
                 console.log("fail: ",rows);
