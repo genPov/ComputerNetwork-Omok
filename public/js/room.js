@@ -22,6 +22,7 @@ export const room = (socket) => {
 		}
 	}
 
+	const users = {};
 	var order;
 
 	// 선후공

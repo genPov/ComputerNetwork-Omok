@@ -6,7 +6,7 @@ class Room {
         this.id = roomCount
         this.name = name;
         this.isPrivate = isPrivate;
-        this.userCount = 1;
+        this.users = {};
     };
 }
 

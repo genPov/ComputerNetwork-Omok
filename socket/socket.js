@@ -18,6 +18,7 @@ module.exports = (server) => {
     // 소켓 연결 시 호출
     io.on("connection", (socket) => {
         console.log('New connection from ' + getAddress(socket));
+        console.log(socket.data);
 
 
         /* 방 리스트 */
@@ -26,6 +27,23 @@ module.exports = (server) => {
             socket.emit("roomList", roomList);
         });
 
+        function joinRoom(room) {
+            room.userCount += 1;
+            socket.join(`${room.id}`);
+            socket.emit("joinRoom");
+        }
+        function exitRoom(room) {
+            room.userCount -= 1;
+            socket.leave(`${roomId}`);
+
+            // 남은 인원이 없는 경우 방 삭제
+            if (room.userCount == 0) {
+                delete roomList[roomId];
+                delete passwords[roomId];
+                io.emit("roomDeleted", room);
+                console.log(`room ${room.id} deleted`);
+            }
+        }
 
         /* 방 생성 */
         // data: {name: string, isPrivate: boolean, password: string}
@@ -46,8 +64,7 @@ module.exports = (server) => {
                 passwords[room.id] = data.password;
             }
 
-            socket.join(`${room.id}`);
-            socket.emit("joinRoom", true);
+            joinRoom(room);
             io.emit("roomAdded", room);
         });
 
@@ -71,9 +88,7 @@ module.exports = (server) => {
                 return;
             }
 
-            socket.join(`${roomId}`);
-            room.userCount += 1;
-            socket.emit("joinRoom", true);
+            joinRoom(room);
         });
 
 
@@ -86,16 +101,6 @@ module.exports = (server) => {
                 return -1;
             }
             
-            room.userCount -= 1;
-            socket.leave(`${roomId}`);
-
-            // 남은 인원이 없는 경우 방 삭제
-            if (room.userCount == 0) {
-                delete roomList[roomId];
-                delete passwords[roomId];
-                io.emit("roomDeleted", room);
-                console.log(`room ${room.id} deleted`);
-            }
 
             return 0;
         }

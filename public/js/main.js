@@ -1,4 +1,8 @@
-var socket = io();
+var socket = io("http://localhost", {
+	auth: {
+    token: `Bearer`,
+  },
+});
 
 import { room } from "./room.js";
 
