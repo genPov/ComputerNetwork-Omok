@@ -19,18 +19,15 @@ module.exports = (server) => {
     io.on("connection", (socket) => {
         console.log('New connection from ' + getAddress(socket));
 
-        // setInterval(()=>{
-        //     console.log(socket.rooms);
-        // }, 1000);
 
-        // 방 리스트
+        /* 방 리스트 */
         // data: null
         socket.on("roomList", (data) => {
             socket.emit("roomList", roomList);
         });
 
 
-        // 방 생성
+        /* 방 생성 */
         // data: {name: string, isPrivate: boolean, password: string}
         socket.on("createRoom", (data) => {
             var name = data.name.trim();
@@ -54,7 +51,8 @@ module.exports = (server) => {
             io.emit("roomAdded", room);
         });
 
-        // 방 참가
+
+        /* 방 참가 */
         // data: {roomId: int, password: string}
         socket.on("joinRoom", (data) => {
             var roomId = data.roomId;
@@ -78,25 +76,18 @@ module.exports = (server) => {
             socket.emit("joinRoom", true);
         });
 
-        // 방 퇴장
-        // data: null
-        socket.on("exitRoom", (data) => {
-            var roomId = Array.from(socket.rooms)[1];
+
+        /* 방 퇴장 */
+        function exitRoom(roomId) {
             var room = roomList[roomId];
 
-            if (roomId == null) {
-                socket.emit("error", "참여중인 방이 없습니다.");
-                return;
-            }
             if (room == null) {
-                socket.emit("error", "오류가 발생했습니다.");
                 console.log(`[*] Error: roomList[${roomId}] == null`);
-                return;
+                return -1;
             }
             
             room.userCount -= 1;
             socket.leave(`${roomId}`);
-            socket.emit("exitRoom");
 
             // 남은 인원이 없는 경우 방 삭제
             if (room.userCount == 0) {
@@ -105,6 +96,59 @@ module.exports = (server) => {
                 io.emit("roomDeleted", room);
                 console.log(`room ${room.id} deleted`);
             }
+
+            return 0;
+        }
+        // data: null
+        socket.on("exitRoom", (data) => {
+            var roomId = Array.from(socket.rooms)[1];
+
+            if (roomId == null) {
+                socket.emit("error", "참여중인 방이 없습니다.");
+                return;
+            }
+            if (exitRoom(roomId) == -1) {
+                socket.emit("error", "오류가 발생했습니다.");
+            }
+            
+            socket.emit("exitRoom");
         });
+
+
+        /* 방 채팅 */
+        socket.on("roomMessage", (msg) => {
+            console.log(`${getAddress(socket)}: ${msg}`);
+
+            var roomId = Array.from(socket.rooms)[1];
+            
+            if (roomId == null) {
+                socket.emit("error", "참여중인 방이 없습니다.");
+                return;
+            }
+            if (typeof msg != "string") {
+                socket.emit("error", "오류가 발생했습니다.");
+                return;
+            }
+
+            io.to(`${roomId}`).emit("roomMessage", {id: socket.id, msg: msg});
+        });
+
+
+
+
+
+        
+        /* 방에 들어가 있는 도중 연결이 끊어진 경우 방 퇴장 */
+        function disconnectCheck(roomId) {
+            var rooms = Array.from(socket.rooms);
+            if (rooms.length == 0 && roomId != null) {
+                console.log(`${getAddress(socket)} disconnected`);
+                exitRoom(roomId);
+                return;
+            }
+
+            setTimeout(() => {disconnectCheck(rooms[1])}, 1000);
+        }
+        disconnectCheck(null);
     });
 }

@@ -7,6 +7,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
         <script src="/socket.io/socket.io.js"></script>
+
+        <script src="https://kit.fontawesome.com/b788f78739.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <!-- 로딩화면 -->
@@ -83,11 +85,18 @@
             </div>
 
             <div class="dashboard">
-                <div class="room-name"></div>
+                <div class="top-bar">
+                    <span class="room-name"></span>
+                    <span class="actions">
+                        <span id="exitRoom"><i class="fa-solid fa-arrow-right-from-bracket fa-lg" style="color: #ffffff;"></i></span>
+                        <span id="roomSetting"></span>
+                    </span>
+                </div>
                 <div class="chat">
                     <div class="message-wrapper"></div>
                     <div class="input-wrapper">
                         <input placeholder="Send a message" />
+                        <i class="fa-solid fa-paper-plane fa-lg" style="color: #ffffff;"></i>
                     </div>
                 </div>
             </div>

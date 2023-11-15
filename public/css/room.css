@@ -95,6 +95,7 @@
 .room > .dashboard > .chat > .input-wrapper {
     display: flex;
     flex-direction: row;
+    align-items: center;
     flex: 0 0 auto;
     
     padding: 15px;
@@ -113,4 +114,8 @@
 }
 .room > .dashboard > .chat > .input-wrapper > input::placeholder {
     color: #CCC;
+}
+
+.room > .dashboard > .chat > .input-wrapper > i {
+    cursor: pointer;
 }

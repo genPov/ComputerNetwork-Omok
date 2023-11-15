@@ -1,8 +1,13 @@
 var socket = io();
 
-import { omok } from "./omok.js";
+import { room } from "./room.js";
 
-omok(socket);
+room(socket);
+
+// 에러 로그
+socket.on("error", (e) => {
+    console.log(e);
+});
 
 // 방 목록 div
 const roomList = document.getElementsByClassName("roomList")[0];
@@ -36,8 +41,6 @@ socket.on("roomAdded", (room) => {
 });
 // 삭제된 방 div에 적용
 socket.on("roomDeleted", (room) => {
-    console.log("roomDeleted");
-    console.log(room);
     document.getElementsByClassName(`${room.id}`)[0].remove();
 });
 
