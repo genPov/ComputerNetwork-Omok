@@ -1,3 +1,4 @@
+const { jwtdata } = require('../middlewares/auth');
 const SocketIO = require("socket.io");
 const Room = require("./room");
 
@@ -18,8 +19,8 @@ module.exports = (server) => {
     // 소켓 연결 시 호출
     io.on("connection", (socket) => {
         console.log('New connection from ' + getAddress(socket));
-
-
+        socket.data = jwtdata(socket.handshake.headers.cookie.split('=')[1]);
+        //console.log(socket.data);
         /* 방 리스트 */
         // data: null
         socket.on("roomList", (data) => {
@@ -117,6 +118,7 @@ module.exports = (server) => {
 
         /* 방 채팅 */
         socket.on("roomMessage", (msg) => {
+            
             console.log(`${getAddress(socket)}: ${msg}`);
 
             var roomId = Array.from(socket.rooms)[1];
