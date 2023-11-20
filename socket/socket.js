@@ -152,11 +152,27 @@ module.exports = (server) => {
             io.to(`${roomId}`).emit("roomMessage", {id: socket.data.uid, msg: msg});
         });
 
+        /* 자동 매칭 */
+        socket.on("autoMatching", (data) => {
+            waitingQueue.push(socket);
+            
+            if (waitingQueue.length >= 2) {
+                const player1 = waitingQueue.shift();
+                const player2 = waitingQueue.shift();
+                                
+                var room = new Room("", false);
+                room.join(player1);
+                room.join(player2);
+                game.game(room, player1, player2)
+            }
+                    
+                socket.on('disconnect', () => {
+                console.log('A user disconnected');
+                waitingQueue = waitingQueue.filter((user) => user.id !== socket.id);
+            }); 
+        });
 
 
-
-
-        
         /* 방에 들어가 있는 도중 연결이 끊어진 경우 방 퇴장 */
         function disconnectCheck(roomId) {
             var socketRoom = Array.from(socket.rooms);
