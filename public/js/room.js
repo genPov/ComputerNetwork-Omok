@@ -1,5 +1,41 @@
 export const room = (socket) => {
 
+	// 게임 화면 div
+	const roomWrapper = document.getElementsByClassName("room")[0];
+
+	var room;
+
+	// 방 입장
+	socket.on("joinRoom", (data) => {
+		roomWrapper.style.display = "flex";
+		room = data;
+	});
+
+	// 방 퇴장
+	socket.on("leaveRoom", () => {
+		roomWrapper.style.display = "none";
+	});
+
+	// 유저 입장
+	socket.on("userJoined", (user) => {
+		console.log(data);
+		room.users[user.uid] = user;
+	});
+
+	// 유저 퇴장
+	socket.on("userLeft", (user) => {
+		console.log(data);
+		delete room.users[user.uid];
+	});
+
+
+	// leaveRoom 버튼 이벤트
+	document.getElementById("leaveRoom").onclick = () => {
+		socket.emit("leaveRoom");
+	};
+
+
+
 	const EMPTY = 0;
 	const BLACK = 1;
 	const WHITE = 2;
@@ -22,12 +58,12 @@ export const room = (socket) => {
 		}
 	}
 
-	var order;
+	var color;
 
 	// 선후공
-	socket.on("order", (data) => {
+	socket.on("color", (data) => {
 		loading.stop()
-		order = data;
+		color = data;
 	});
 
 	// 오목 진행
