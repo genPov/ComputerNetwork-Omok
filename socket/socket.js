@@ -127,7 +127,13 @@ module.exports = (server) => {
 
             leaveRoom(room);
         });
-
+        
+        socket.on("joinP1", (data) => {
+            
+        });
+        socket.on("joinP2", (data) => {
+            
+        });
 
         /* 방 채팅 */
         socket.on("roomMessage", (msg) => {

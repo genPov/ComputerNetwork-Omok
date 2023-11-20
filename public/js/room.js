@@ -29,11 +29,17 @@ export const room = (socket) => {
 	});
 
 
-	// leaveRoom 버튼 이벤트
+	/* 버튼 이벤트 */
 	document.getElementById("leaveRoom").onclick = () => {
 		socket.emit("leaveRoom");
 	};
 
+	document.getElementById("p1").onclick = () => {
+		socket.emit("joinPlayer", 1);
+	};
+	document.getElementById("p2").onclick = () => {
+		socket.emit("joinPlayer", 2);
+	};
 
 
 	const EMPTY = 0;
