@@ -1,7 +1,6 @@
 const { jwtdata } = require('../middlewares/auth');
 const SocketIO = require("socket.io");
 const Room = require("./room");
-const game = require("./game");
 
 module.exports = (server) => {
     console.log("socket start");
@@ -13,7 +12,7 @@ module.exports = (server) => {
     }
     
     const io = SocketIO(server, { path: "/socket.io" });
-
+    const waitingQueue = [];
     const rooms = {};
     const passwords = {};
 
@@ -164,7 +163,7 @@ module.exports = (server) => {
                 var room = new Room("", false);
                 room.join(player1);
                 room.join(player2);
-                game(room, player1, player2)
+                game.game(room, player1, player2)
             }
                     
                 socket.on('disconnect', () => {
