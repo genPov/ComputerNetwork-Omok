@@ -88,6 +88,12 @@ setOnclickListner("createRoom", () => {
     document.getElementById("popup").style.display = "none";
 });
 
+
+setOnclickListner("autoMatching", () => {
+    socket.emit("autoMatching", true);
+});
+
+
 setOnclickListner("logout", () => {
     location.href="/logout"
 });

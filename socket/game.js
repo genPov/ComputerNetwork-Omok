@@ -1,3 +1,5 @@
-function game(p1, p2) {
-    
-}
+module.exports = {
+    game: function (p1,p2) {
+        
+    },
+};  

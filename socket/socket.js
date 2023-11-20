@@ -1,6 +1,7 @@
 const { jwtdata } = require('../middlewares/auth');
 const SocketIO = require("socket.io");
 const Room = require("./room");
+const game = require("./game");
 
 module.exports = (server) => {
     console.log("socket start");
@@ -14,7 +15,7 @@ module.exports = (server) => {
 
     const roomList = [];
     const passwords = [];
-
+    const waitingQueue = [];
 
     // 소켓 연결 시 호출
     io.on("connection", (socket) => {
@@ -135,9 +136,23 @@ module.exports = (server) => {
             io.to(`${roomId}`).emit("roomMessage", {id: socket.data.uid, msg: msg});
         });
 
-
-
-
+        /* 자동 매칭 */
+        socket.on("autoMatching", (data) => {
+            waitingQueue.push(socket);
+    
+            if (waitingQueue.length >= 2) {
+                const player1 = waitingQueue.shift();
+                const player2 = waitingQueue.shift();
+                        
+                new Room("", false);
+                game.game(player1, player2)
+            }
+            
+              socket.on('disconnect', () => {
+                console.log('A user disconnected');
+                waitingQueue = waitingQueue.filter((user) => user.id !== socket.id);
+            }); 
+        });
 
         
         /* 방에 들어가 있는 도중 연결이 끊어진 경우 방 퇴장 */
