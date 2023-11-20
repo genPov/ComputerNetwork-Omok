@@ -1,3 +1,4 @@
+const exp = require('constants');
 const fs = require('fs');
 const data = fs.readFileSync('./config.json');
 const conf = JSON.parse(data);
@@ -16,5 +17,15 @@ const jwt = require('jsonwebtoken');
         catch (error) {
             res.clearCookie('token');
             res.redirect('/login');
+        }
+    }
+
+    exports.jwtdata = (mycookie) => {
+        try {
+            const verified = jwt.verify(mycookie, SECRET_KEY);
+            return verified;
+        }
+        catch (error) {
+            return null;
         }
     }

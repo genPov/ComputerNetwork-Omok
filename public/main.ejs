@@ -78,7 +78,7 @@
 
         
         <!-- 게임방 -->
-        <div class="room" style="display: none;">
+        <div class="room" style="display: flex;">
 
             <div class="game">
                 <div class="omok-board"></div>
@@ -88,9 +88,13 @@
                 <div class="top-bar">
                     <span class="room-name"></span>
                     <span class="actions">
-                        <span id="exitRoom"><i class="fa-solid fa-arrow-right-from-bracket fa-lg" style="color: #ffffff;"></i></span>
+                        <span id="leaveRoom"><i class="fa-solid fa-arrow-right-from-bracket fa-lg" style="color: #ffffff;"></i></span>
                         <span id="roomSetting"></span>
                     </span>
+                </div>
+                <div class="players">
+                    <div id="p1" class="player left">player1</div>
+                    <div id="p2" class="player left">player2</div>
                 </div>
                 <div class="chat">
                     <div class="message-wrapper"></div>

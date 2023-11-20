@@ -1,8 +1,4 @@
-var socket = io("http://localhost", {
-	auth: {
-    token: `Bearer`,
-  },
-});
+var socket = io();
 
 import { room } from "./room.js";
 
@@ -15,8 +11,6 @@ socket.on("error", (e) => {
 
 // 방 목록 div
 const roomList = document.getElementsByClassName("roomList")[0];
-// 게임 화면 div
-const Room = document.getElementsByClassName("room")[0];
 
 // div에 room 추가 함수
 function addRoom(room) {
@@ -24,6 +18,7 @@ function addRoom(room) {
     item.classList.add("list");
     item.classList.add(`${room.id}`);
     item.innerHTML = room.name;
+    console.log({roomId: room.id, password: ""});
     item.onclick = () => {
         socket.emit("joinRoom", {roomId: room.id, password: ""});
     };
@@ -33,9 +28,11 @@ function addRoom(room) {
 // 방 목록 초기화
 socket.emit("roomList", 1)
 socket.on("roomList", (rooms) => {
-    for (var room of rooms) {
-        if (room != null)
-            addRoom(room);
+    console.log(rooms);
+    console.log(Object.values(rooms));
+    for (var room of Object.values(rooms)) {
+        console.log(room);
+        addRoom(room);
     }
 });
 
@@ -46,16 +43,6 @@ socket.on("roomAdded", (room) => {
 // 삭제된 방 div에 적용
 socket.on("roomDeleted", (room) => {
     document.getElementsByClassName(`${room.id}`)[0].remove();
-});
-
-// 방 입장
-socket.on("joinRoom", (data) => {
-    Room.style.display = "flex";
-});
-
-// 방 퇴장
-socket.on("exitRoom", (data) => {
-    Room.style.display = "none";
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -94,12 +81,4 @@ setOnclickListner("createRoom", () => {
 
 setOnclickListner("logout", () => {
     location.href="/logout"
-});
-
-
-
-// room 내부
-
-setOnclickListner("exitRoom", () => {
-    socket.emit("exitRoom", true);
 });

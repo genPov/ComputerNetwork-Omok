@@ -1,3 +1,4 @@
+// 빈값 체크
 function nullCheck() {
     for (let i = 0; i < arguments.length; i++) {
         if (arguments[i] == null) {
@@ -7,6 +8,7 @@ function nullCheck() {
     return true;
 }
 
+// 중복 확인
 function isDuplicated(connection,uid) {
     let query = 'SELECT * FROM users WHERE uid=?';
     connection.query(query,[uid],(error,rows,fields) => {
@@ -60,5 +62,6 @@ function updateRank(connection) {
         }
     })
 }
+
 
 module.exports = { nullCheck, updateInfo,isDuplicated, updateRank };
