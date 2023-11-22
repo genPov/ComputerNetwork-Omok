@@ -176,7 +176,6 @@ module.exports = (server) => {
             waitingQueue.push(socket);
             
             if (waitingQueue.length >= 2) {
-                console.log(waitingQueue);
                 var player1 = waitingQueue.shift();
                 var player2 = waitingQueue.shift();
                 
