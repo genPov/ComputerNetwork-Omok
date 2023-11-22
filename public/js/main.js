@@ -63,6 +63,16 @@ setOnclickListner("closePopup", () => {
     document.getElementById("popup").style.display = "none";
 });
 
+setOnclickListner("openPopup2", () => {
+    document.getElementById("popup2").style.display = "block";
+});
+
+setOnclickListner("closePopup2", () => {
+    document.getElementById("popup2").style.display = "none";
+    socket.emit("disconnect");
+});
+
+
 setOnclickListner("createRoom", () => {
     var name = document.getElementById("roomName").value;
     var rpw = document.getElementById("rpw").value;
