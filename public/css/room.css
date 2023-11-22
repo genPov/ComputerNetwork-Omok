@@ -61,10 +61,18 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     flex: 0 0 auto;
 
     padding: 15px;
     background-color: #4e5a87;
+}
+
+.room > .dashboard > .top-bar > .room-name{
+    font-size: 15px;
+    font-weight: bold;
+    color: #FFF;
+    word-break: break-all;
 }
 
 .room > .dashboard > .top-bar > .actions > span {
@@ -87,13 +95,14 @@
     height: 80px;
     margin: 1% 0.5%;
     background-color: #323e6b;
+    color: gray;
+    cursor: pointer;
 }
 
-.room > .dashboard > .players > .left {
-    color: gray;
-}
 .room > .dashboard > .players > .joined {
+    background-color: #4c5989;
     color: white;
+    cursor: default;
 }
 
 .room > .dashboard > .chat {

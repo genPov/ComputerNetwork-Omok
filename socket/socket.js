@@ -1,15 +1,11 @@
 const { jwtdata } = require('../middlewares/auth');
 const SocketIO = require("socket.io");
 const Room = require("./room");
+const game = require("./game");
+
 
 module.exports = (server) => {
     console.log("socket start");
-
-    const getAddress = (socket) => {
-        var address = ㅁ;
-        return address;
-        //return address.address + ':' + address.port;
-    }
     
     const io = SocketIO(server, { path: "/socket.io" });
     const waitingQueue = [];
@@ -26,6 +22,8 @@ module.exports = (server) => {
             socket.emit("error", "연결 실패");
             return;
         }
+        
+        console.log(`${socket.data.uid} connected`);
         
         /* 방 리스트 */
         // data: null
@@ -64,7 +62,8 @@ module.exports = (server) => {
                 passwords[room.id] = data.password;
             }
 
-            room.join(socket);
+            room.join(io, socket);
+            room.host = socket.data;
             io.emit("roomAdded", room);
         });
 
@@ -91,48 +90,41 @@ module.exports = (server) => {
                 return;
             }
 
-            room.join(socket);
-            io.to(`${room.id}`).emit("userJoined", socket.data);
+            room.join(io, socket);
         });
 
 
         /* 방 퇴장 */
-        // data: null
         function leaveRoom(room) {
-            room.leave(socket);
+            room.leave(io, socket);
 
             if (room.userCount == 0) {
                 delete rooms[room.id];
                 delete passwords[room.id];
                 io.emit("roomDeleted", room);
             }
-            else {
-                io.to(`${room.id}`).emit("userLeft", socket.data);
-            }
         }
-        socket.on("leaveRoom", (data) => {
-            var roomId = Array.from(socket.rooms)[1];
-
-            if (roomId == null) {
+        socket.on("leaveRoom", () => {
+            if (socket.room == null) {
                 socket.emit("error", "참여중인 방이 없습니다.");
                 return;
             }
-            
-            var room = rooms[roomId];
 
-            if (room == null) {
-                console.log(`[*] Error: roomList[${roomId}] == null`);
-                socket.emit("error", "오류가 발생했습니다.");
-            }
-
-            leaveRoom(room);
+            leaveRoom(socket.room);
         });
         
-        socket.on("joinP1", (data) => {
-            
+        /* 플레이어 입장 */
+        // n: number
+        socket.on("setPlayer", (n) => {
+            if (typeof n != "number" || n != 0 && n != 1) {
+                socket.emit("error", "타입 오류");
+            }
+            socket.room.setPlayer(io, socket, n);
         });
-        socket.on("joinP2", (data) => {
-            
+
+        /* 플레이어 퇴장 */
+        socket.on("unsetPlayer", () => {
+            socket.room.unsetPlayer(io, socket);
         });
 
         /* 방 채팅 */
@@ -141,15 +133,12 @@ module.exports = (server) => {
                 socket.emit("error", "타입 오류");
                 return;
             }
-
-            var roomId = Array.from(socket.rooms)[1];
-            
-            if (roomId == null) {
+            if (socket.room == null) {
                 socket.emit("error", "참여중인 방이 없습니다.");
                 return;
             }
 
-            io.to(`${roomId}`).emit("roomMessage", {id: socket.data.uid, msg: msg});
+            socket.room.emit("roomMessage", {id: socket.data.uid, msg: msg});
         });
 
         /* 자동 매칭 */
@@ -159,26 +148,27 @@ module.exports = (server) => {
             if (waitingQueue.length >= 2) {
                 const player1 = waitingQueue.shift();
                 const player2 = waitingQueue.shift();
-                                
+                
                 var room = new Room("", false);
                 room.join(player1);
                 room.join(player2);
-                game.game(room, player1, player2)
+                game(room, player1, player2);
             }
                     
-                socket.on('disconnect', () => {
+            socket.on('disconnect', () => {
                 console.log('A user disconnected');
                 waitingQueue = waitingQueue.filter((user) => user.id !== socket.id);
-            }); 
+            });
         });
 
 
-        /* 방에 들어가 있는 도중 연결이 끊어진 경우 방 퇴장 */
+        /* 연결 끊김 처리 */
         function disconnectCheck(roomId) {
             var socketRoom = Array.from(socket.rooms);
+            
             if (socketRoom.length == 0 && roomId != null) {
                 console.log(`${socket.data.uid} disconnected`);
-                leaveRoom(rooms[roomId]);
+                leaveRoom(socket.room);
                 return;
             }
 

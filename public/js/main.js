@@ -6,7 +6,7 @@ room(socket);
 
 // 에러 로그
 socket.on("error", (e) => {
-    console.log(e);
+    console.error(e);
 });
 
 // 방 목록 div
@@ -18,7 +18,6 @@ function addRoom(room) {
     item.classList.add("list");
     item.classList.add(`${room.id}`);
     item.innerHTML = room.name;
-    console.log({roomId: room.id, password: ""});
     item.onclick = () => {
         socket.emit("joinRoom", {roomId: room.id, password: ""});
     };
@@ -28,10 +27,7 @@ function addRoom(room) {
 // 방 목록 초기화
 socket.emit("roomList", 1)
 socket.on("roomList", (rooms) => {
-    console.log(rooms);
-    console.log(Object.values(rooms));
     for (var room of Object.values(rooms)) {
-        console.log(room);
         addRoom(room);
     }
 });
@@ -73,7 +69,6 @@ setOnclickListner("createRoom", () => {
     var isPrivate = document.getElementById("secret").checked;
     var room = {name,rpw,isPrivate};
     
-    console.log(room);
     socket.emit("createRoom", room);
     
     document.getElementById("popup").style.display = "none";
