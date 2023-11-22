@@ -29,7 +29,7 @@ class Room {
         this.userCount -= 1;
         this.unsetPlayer(io, socket);
 
-        if (this.host.uid == socket.data.uid) {
+        if (this.host != null && this.host.uid == socket.data.uid) {
             if (this.userCount > 0) {
                 this.host = Object.values(this.users)[0];
                 this.emit(io, "changeHost", this.host);
