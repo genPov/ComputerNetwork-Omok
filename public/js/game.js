@@ -41,6 +41,13 @@ export const game = (socket, room) => {
             else if (room.player[1].uid == socket.data.uid) {
                 players[1].style.color = "black";
             }
+        } else {
+            if (room.player[0].uid == socket.data.uid) {
+                players[1].style.color = "black";
+            }
+            else if (room.player[1].uid == socket.data.uid) {
+                players[0].style.color = "black";
+            }
         }
 
         // 오목판 생성
