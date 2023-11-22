@@ -48,7 +48,7 @@ module.exports = class Omok {
             while (1) {
                 xx += dx;
                 yy += dy;
-                if (this.board[y][x] != color) {
+                if (this.board[yy][xx] != color) {
                     break;
                 }
                 cnt += 1;

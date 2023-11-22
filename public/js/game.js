@@ -8,6 +8,8 @@ export const game = (socket, room) => {
 	const state = [];
 	const cells = [];
 
+    const players = document.getElementsByClassName("player");
+
 	var color;
 
     var time = 30;
@@ -31,6 +33,15 @@ export const game = (socket, room) => {
 	// 선후공
 	socket.on("order", (data) => {
 		color = data;
+
+        if (color == BLACK) {
+            if (room.player[0].uid == socket.data.uid) {
+                players[0].style.color = "black";
+            }
+            else if (room.player[1].uid == socket.data.uid) {
+                players[1].style.color = "black";
+            }
+        }
 
         // 오목판 생성
         board.replaceChildren();
@@ -76,8 +87,6 @@ export const game = (socket, room) => {
 
 
     /* 게임 종료 */
-    const players = document.getElementsByClassName("player");
-
     socket.on("gameEnd", (winner) => {
         timerBar.style.display = "none";
         clearInterval(interval);

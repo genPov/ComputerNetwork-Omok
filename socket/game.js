@@ -48,7 +48,6 @@ module.exports = (io, room, p1, p2) => {
     }, 200);
 
     black.on("move", (pos) => {
-        console.log(pos);
         if (order != BLACK || omok.set(BLACK, pos.x, pos.y) == -1) {
             black.emit("error", "오류가 발생했습니다.");
             return;
@@ -56,6 +55,7 @@ module.exports = (io, room, p1, p2) => {
         
         time = new Date();
         room.emit(io, "move", {x: pos.x, y: pos.y, color: BLACK});
+        order = WHITE;
 
         if (omok.isWin(BLACK, pos.x, pos.y)) {
             win(BLACK);
@@ -63,7 +63,6 @@ module.exports = (io, room, p1, p2) => {
     });
 
     white.on("move", (pos) => {
-        console.log(pos);
         if (order != WHITE || omok.set(WHITE, pos.x, pos.y) == -1) {
             white.emit("error", "오류가 발생했습니다.");
             return;
@@ -71,6 +70,7 @@ module.exports = (io, room, p1, p2) => {
         
         time = new Date();
         room.emit(io, "move", {x: pos.x, y: pos.y, color: WHITE});
+        order = BLACK;
 
         if (omok.isWin(WHITE, pos.x, pos.y)) {
             win(WHITE);

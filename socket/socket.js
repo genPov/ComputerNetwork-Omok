@@ -18,10 +18,10 @@ module.exports = (server) => {
         console.log('New connection from ' + socket.handshake.address);
         
         // 디버깅
-        // socket.prependAny((data) => {
-        //     console.log(socket.data.uid);
-        //     console.log(data);
-        // });
+        socket.prependAny((eventName, ...args) => {
+            console.log(`${socket.data}`);
+            console.log(eventName, args);
+        });
 
         socket.data = jwtdata(socket.handshake.headers.cookie.split('=')[1]);
         if (socket.data == null) {

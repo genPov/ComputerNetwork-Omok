@@ -1,5 +1,10 @@
 var socket = io();
 
+// 디버깅
+socket.prependAny((eventName, ...args) => {
+    console.log(eventName, args);
+});
+
 socket.on("auth", (data) => {
     socket.data = data;
 })
