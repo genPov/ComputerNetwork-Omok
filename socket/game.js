@@ -3,6 +3,8 @@ const Omok = require("./omok");
 // room, 플레이어1, 플레이어2
 module.exports = (io, room, p1, p2) => {
 
+    room.emit(io, "startGame");
+
     const EMPTY = 0;
 	const BLACK = 1;
 	const WHITE = 2;
@@ -41,9 +43,10 @@ module.exports = (io, room, p1, p2) => {
         room.emit(io, "gameEnd", winner);
     }
 
-    setInterval(() => {
+    var timeCheck = setInterval(() => {
         if (new Date() - time > limit) {
             win(order == BLACK ? WHITE : BLACK);
+            clearInterval(timeCheck);
         }
     }, 200);
 

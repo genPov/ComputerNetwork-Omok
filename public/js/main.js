@@ -78,7 +78,7 @@ setOnclickListner("openPopup2", () => {
 
 setOnclickListner("closePopup2", () => {
     document.getElementById("popup2").style.display = "none";
-    socket.emit("disconnect");
+    socket.emit("cancelAutoMatching");
 });
 
 
@@ -93,10 +93,13 @@ setOnclickListner("createRoom", () => {
     document.getElementById("popup").style.display = "none";
 });
 
-
+/* 자동 매칭 */
 setOnclickListner("autoMatching", () => {
     socket.emit("autoMatching", true);
 });
+socket.on("autoMatching", () => {
+    document.getElementById("popup2").style.display = "none";
+})
 
 
 setOnclickListner("logout", () => {

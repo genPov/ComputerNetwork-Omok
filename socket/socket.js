@@ -8,7 +8,7 @@ module.exports = (server) => {
     console.log("socket start");
     
     const io = SocketIO(server, { path: "/socket.io" });
-    const waitingQueue = [];
+    var waitingQueue = [];
     const rooms = {};
     const passwords = {};
 
@@ -69,6 +69,7 @@ module.exports = (server) => {
                 passwords[room.id] = data.password;
             }
 
+            room.host = socket.data;
             room.join(io, socket);
             io.emit("roomAdded", room);
         });
@@ -166,29 +167,31 @@ module.exports = (server) => {
                 socket.emit("error", "유저 2명 모두 준비해야 합니다.");
                 return;
             }
-            socket.room.emit(io, "startGame");
 
             game(io, socket.room, players[0], players[1]);
         });
 
         /* 자동 매칭 */
-        socket.on("autoMatching", (data) => {
+        socket.on("autoMatching", () => {
             waitingQueue.push(socket);
             
             if (waitingQueue.length >= 2) {
-                const player1 = waitingQueue.shift();
-                const player2 = waitingQueue.shift();
+                console.log(waitingQueue);
+                var player1 = waitingQueue.shift();
+                var player2 = waitingQueue.shift();
                 
                 var room = new Room("", false);
-                room.join(player1);
-                room.join(player2);
+                room.join(io, player1);
+                room.join(io, player2);
+                room.setPlayer(io, player1, 0);
+                room.setPlayer(io, player2, 1);
+
+                room.emit(io, "autoMatching");
                 game(io, room, player1, player2);
             }
-                    
-            socket.on('disconnect', () => {
-                console.log('A user disconnected');
-                waitingQueue = waitingQueue.filter((user) => user.id !== socket.id);
-            });
+        });
+        socket.on("cancelAutoMatching", () => {
+            waitingQueue = waitingQueue.filter((user) => user.data.uid !== socket.data.uid);
         });
 
 
@@ -199,6 +202,7 @@ module.exports = (server) => {
             if (socketRoom.length == 0 && roomId != null) {
                 console.log(`${socket.data.uid} disconnected`);
                 leaveRoom(socket.room);
+                waitingQueue = waitingQueue.filter((user) => user.data.uid !== socket.data.uid);
                 return;
             }
 

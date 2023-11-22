@@ -16,9 +16,6 @@ class Room {
 
     join(io, socket) {
         this.users[socket.data.uid] = socket.data;
-        if (this.userCount == 0) {
-            this.host = socket.data;
-        }
         this.userCount += 1;
 
         socket.room = this;
