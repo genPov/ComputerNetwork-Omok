@@ -1,5 +1,9 @@
 var socket = io();
 
+socket.on("auth", (data) => {
+    socket.data = data;
+})
+
 import { room } from "./room.js";
 
 room(socket);

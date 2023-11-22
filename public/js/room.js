@@ -1,3 +1,5 @@
+import { game } from "./game.js";
+
 export const room = (socket) => {
 
 	// 게임 화면 div
@@ -6,6 +8,12 @@ export const room = (socket) => {
 	// 방 제목
 	const title = document.querySelector(".room > .dashboard > .top-bar > .room-name");
 
+	// 플레이어 1, 2
+	const player = document.getElementsByClassName("player");
+
+	// 시작 버튼
+	const startButton = document.querySelector(".room > .dashboard > .start-button");
+
 	// 채팅창
 	const chat = document.querySelector(".room > .dashboard > .chat > .message-wrapper");
 	
@@ -13,17 +21,24 @@ export const room = (socket) => {
 	const messageInput = document.querySelector(".room > .dashboard > .chat > .input-wrapper > input");
 	const sendMessageButton = document.querySelector(".room > .dashboard > .chat > .input-wrapper > i");
 
-	// 플레이어 1, 2
-	const player = document.getElementsByClassName("player");
 
-
-	function setPlayer(e, player, n) {
+	function setPlayer(e, player) {
 		e.textContent = player.uid;
 		e.classList.add("joined");
 	}
 	function unsetPlayer(e, n) {
 		e.textContent = `player${n+1}`;
 		e.classList.remove("joined");
+	}
+
+	function addMessage(msg, color = "white") {
+		var msgdiv = document.createElement("div");
+		msgdiv.textContent = msg;
+		msgdiv.style.color = color;
+		chat.appendChild(msgdiv);
+
+		// 스크롤 맨 아래로
+		chat.scrollTo(0, chat.scrollHeight);
 	}
 
 
@@ -34,11 +49,14 @@ export const room = (socket) => {
 		room = data;
 		roomWrapper.style.display = "flex";
 
-		// 이전 채팅 삭제
-		chat.replaceChildren();
-
 		// 방 제목
 		title.textContent = room.name;
+
+		// 방장이면 시작 버튼 보이기
+		console.log(room);
+		if (socket.data.uid == room.host.uid) {
+			startButton.style.display = "flex";
+		}
 
 		// 플레이어
 		if (room.player[0] != null) {
@@ -47,6 +65,9 @@ export const room = (socket) => {
 		if (room.player[1] != null) {
 			setPlayer(player[1], room.player[1], 1);
 		}
+
+		// 이전 채팅 삭제
+		chat.replaceChildren();
 	});
 
 	/* 방 퇴장 */
@@ -60,11 +81,26 @@ export const room = (socket) => {
 	/* 유저 입장 */
 	socket.on("userJoined", (user) => {
 		room.users[user.uid] = user;
+		addMessage(`${user.uid}님이 입장하셨습니다.`, "yellow");
 	});
 
 	/* 유저 퇴장 */
 	socket.on("userLeft", (user) => {
 		delete room.users[user.uid];
+		addMessage(`${user.uid}님이 퇴장하셨습니다.`, "yellow");
+	});
+
+	/* 방장 변경 */
+	socket.on("changeHost", (user) => {
+		room.host = user;
+
+		// 방장 설정
+		if (socket.data.uid == room.host.uid) {
+			startButton.style.display = "flex";
+		}
+		else {
+			startButton.style.display = "none";
+		}
 	});
 
 	/* 플레이어 입장 */
@@ -85,64 +121,17 @@ export const room = (socket) => {
 		unsetPlayer(player[n], n);
 	});
 
-
-
-	const EMPTY = 0;
-	const BLACK = 1;
-	const WHITE = 2;
-
-	// 오목판 생성
-	const board = document.querySelector(".room > .game > .omok-board");
-	const state = [];
-	const cells = [];
-	for (var i = 0; i < 15; i++) {
-		state[i] = [];
-		cells[i] = [];
-		for (var j = 0; j < 15; j++) {
-			var cell = document.createElement("div");
-			cell.className = "empty";
-			cell.onclick = () => { move(j, i) };
-
-			board.appendChild(cell);
-			state[i][j] = EMPTY;
-			cells[i][j] = cell;
-		}
+	/* 게임 시작 */
+	startButton.onclick = () => {
+		socket.emit("startGame");
 	}
-
-	var color;
-
-	// 선후공
-	socket.on("color", (data) => {
-		loading.stop()
-		color = data;
+	socket.on("startGame", () => {
+		game(socket, room);
 	});
 
-	// 오목 진행
-	socket.on("move", (data) => {
-		var x = data.x;
-		var y = data.y;
-		console.log(`move=(${x}, ${y})`);
-	});
-
-
-	/* 착수 */
-	function move(x, y) {
-		socket.emit("move", {"x":x,"y":y});
-	}
-	// 착수 적용
-	// data: {color: int, x: int, y: int}
-	socket.on("move", (data) => {
-		var x = data.x;
-		var y = data.y;
-		var color = data.color;
-		
-		state[y][x] = color;
-		cells[y][x].className = (color == BLACK) ? "stone-black" : "stone-white";
-	});
 
 
 	/* 메세지 송신 */
-	
 	// input 엔터 이벤트
 	messageInput.addEventListener("keyup", (event) => {
 		if (event.keyCode === 13) {
@@ -161,11 +150,7 @@ export const room = (socket) => {
 		var id = data.id;
 		var msg = data.msg;
 
-		var msgdiv = document.createElement("div");
-		msgdiv.innerHTML = `${id}: ${msg}`;
-		chat.appendChild(msgdiv);
-
-		// 스크롤 맨 아래로
-		chat.scrollTo(0, chat.scrollHeight);
+		addMessage(`${id}: ${msg}`);
 	});
+
 }

@@ -1,22 +1,19 @@
-class Omok {
+module.exports = class Omok {
     
+    EMPTY = 0;
+	BLACK = 1;
+	WHITE = 2;
+
     constructor() {
-        self.board = [];
+        this.board = [];
         for (var i = 0; i < 15; i++) {
-            self.board[i] = [];
+            this.board[i] = [];
             for (var j = 0; j < 15; j++) {
-                self.board[i][j] = 0;
+                this.board[i][j] = 0;
             }
         }
 
-        self.current = {};
-    }
-
-    get BLACK() {
-        return 1;
-    }
-    get WHITE() {
-        return 2;
+        this.current = {};
     }
 
     // 돌 놓기
@@ -24,18 +21,18 @@ class Omok {
         
         // 돌 색 검사
         if (color != this.BLACK && color != this.WHITE) {
-            return -1
+            return -1;
         }
         // 좌표 이탈 검사
         if (x < 0 || x >= 15 || y < 0 || y >= 15) {
             return -1;
         }
         // 놓을 수 있는 곳인지 검사
-        if (self.board[y][x] != 0) {
-
+        if (this.board[y][x] != 0) {
+            return -1;
         }
 
-        self.board[y][x] = color;
+        this.board[y][x] = color;
 
         //this.setForbidden();
 
@@ -51,7 +48,7 @@ class Omok {
             while (1) {
                 xx += dx;
                 yy += dy;
-                if (self.board[y][x] != color) {
+                if (this.board[y][x] != color) {
                     break;
                 }
                 cnt += 1;
@@ -59,16 +56,24 @@ class Omok {
             return cnt;
         }
 
-        if (
+        if (color == this.BLACK && (
             count(-1, -1) + count(1, 1) == 4 ||
             count(-1, 0) + count(1, 0) == 4 ||
             count(0, -1) + count(0, 1) == 4 ||
             count(-1, 1) + count(1, -1) == 4
-        ) {
-            return 1;
+        )) {
+            return true;
+        }
+        else if (color == this.WHITE && (
+            count(-1, -1) + count(1, 1) >= 4 ||
+            count(-1, 0) + count(1, 0) >= 4 ||
+            count(0, -1) + count(0, 1) >= 4 ||
+            count(-1, 1) + count(1, -1) >= 4
+        )) {
+            return true;
         }
         else {
-            return 0;
+            return false;
         }
     }
 }

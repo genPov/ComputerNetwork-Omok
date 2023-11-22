@@ -17,12 +17,19 @@ module.exports = (server) => {
     io.on("connection", (socket) => {
         console.log('New connection from ' + socket.handshake.address);
         
+        // 디버깅
+        // socket.prependAny((data) => {
+        //     console.log(socket.data.uid);
+        //     console.log(data);
+        // });
+
         socket.data = jwtdata(socket.handshake.headers.cookie.split('=')[1]);
         if (socket.data == null) {
             socket.emit("error", "연결 실패");
             return;
         }
-        
+
+        socket.emit("auth", socket.data);
         console.log(`${socket.data.uid} connected`);
         
         /* 방 리스트 */
@@ -63,7 +70,6 @@ module.exports = (server) => {
             }
 
             room.join(io, socket);
-            room.host = socket.data;
             io.emit("roomAdded", room);
         });
 
@@ -112,6 +118,14 @@ module.exports = (server) => {
 
             leaveRoom(socket.room);
         });
+
+        /* 방장 변경 */
+        socket.on("changeHost", (user) => {
+            if (typeof n != "number" || n != 0 && n != 1) {
+                socket.emit("error", "타입 오류");
+            }
+            socket.room.setPlayer(io, socket, n);
+        });
         
         /* 플레이어 입장 */
         // n: number
@@ -138,7 +152,23 @@ module.exports = (server) => {
                 return;
             }
 
-            socket.room.emit("roomMessage", {id: socket.data.uid, msg: msg});
+            socket.room.emit(io, "roomMessage", {id: socket.data.uid, msg: msg});
+        });
+
+        /* 게임 시작 */
+        socket.on("startGame", () => {
+            if (socket.room.host != socket.data) {
+                socket.emit("error", "권한이 없습니다.");
+                return;
+            }
+            players = socket.room.getPlayers();
+            if (players == null || players.length != 2) {
+                socket.emit("error", "유저 2명 모두 준비해야 합니다.");
+                return;
+            }
+            socket.room.emit(io, "startGame");
+
+            game(io, socket.room, players[0], players[1]);
         });
 
         /* 자동 매칭 */
@@ -152,7 +182,7 @@ module.exports = (server) => {
                 var room = new Room("", false);
                 room.join(player1);
                 room.join(player2);
-                game(room, player1, player2);
+                game(io, room, player1, player2);
             }
                     
             socket.on('disconnect', () => {

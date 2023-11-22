@@ -16,6 +16,9 @@ class Room {
 
     join(io, socket) {
         this.users[socket.data.uid] = socket.data;
+        if (this.userCount == 0) {
+            this.host = socket.data;
+        }
         this.userCount += 1;
 
         socket.room = this;
@@ -29,10 +32,20 @@ class Room {
         this.userCount -= 1;
         this.unsetPlayer(io, socket);
 
+        if (this.host.uid == socket.data.uid) {
+            if (this.userCount > 0) {
+                this.host = Object.values(this.users)[0];
+                this.emit(io, "changeHost", this.host);
+            }
+        }
         socket.room = null;
         socket.leave(`${this.id}`);
         socket.emit("leaveRoom");
         this.emit(io, "userLeft", socket.data);
+    }
+
+    getPlayers() {
+        return players[this.id];
     }
 
     setPlayer(io, socket, n) {
