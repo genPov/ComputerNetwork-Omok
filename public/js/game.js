@@ -40,7 +40,11 @@ export const game = (socket, room) => {
             for (var j = 0; j < 15; j++) {
                 var cell = document.createElement("div");
                 cell.className = "empty";
-                cell.onclick = () => { move(j, i) };
+                cell.onclick = (function (x, y) {
+                    return function () {
+                        move(x, y);
+                    };
+                })(j, i);
 
                 board.appendChild(cell);
                 state[i][j] = EMPTY;
